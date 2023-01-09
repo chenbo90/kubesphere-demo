@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.chenbo.demo1.dao.PocOrderMapper">
+    <!--配置一个resultMap 指定返回的类型 -->
+    <resultMap id="pocOrderMap" type="com.chenbo.demo1.entity.PocOrder">
+        <id column="id" property="id" />
+        <result column="userid" property="userid" />
+        <result column="orderid" property="orderid" />
+        <result column="productid" property="productid" />
+        <result column="fee" property="fee" />
+    </resultMap>
+    <!-- 用户信息表 表名定义 -->
+    <sql id="tableName">cmc_poc_order</sql>
+
+    <!-- 用户信息表 所有列定义 -->
+    <sql id="tbAllColumns">
+		id,
+		userid,
+		orderid,
+		productid,
+		fee
+	</sql>
+
+    <!-- 站点信息表 新增列定义 -->
+    <sql id="tbInsertColumns">
+		id,
+		userid,
+		orderid,
+		productid,
+		fee
+	</sql>
+
+    <!-- mybatis_config中配置的alias类别名,也可直接配置resultType为类路径 -->
+    <!-- 新增用户信息表 -->
+
+    <insert id="order" parameterType="com.chenbo.demo1.entity.PocOrder">
+        <selectKey keyProperty="id" resultType="int" order="BEFORE">
+            <!--select CMC_POC_ORDER$SEQ.nextval from dual-->
+            SELECT NEXTVAL('CMC_POC_ORDER$SEQ');
+        </selectKey>
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="tbInsertColumns"/>
+        )
+        values(#{id},#{userid},#{orderid},#{productid},#{fee})
+    </insert>
+
+</mapper>
